@@ -1,0 +1,6 @@
+{
+  "name": "Razwon Blog",
+  "description": "A clean, minimalist, high-performance React blog with Firebase Firestore backend.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
