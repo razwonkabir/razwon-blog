@@ -57,3 +57,44 @@
 .markdown-body a {
   @apply text-indigo-600 dark:text-indigo-400 hover:text-indigo-500 dark:hover:text-indigo-300 underline underline-offset-4 transition-colors;
 }
+
+/* Table styles */
+.markdown-body table {
+  @apply w-full border-collapse my-6 text-sm text-left overflow-hidden rounded-lg;
+}
+
+.markdown-body th {
+  @apply bg-slate-100 dark:bg-slate-800/80 text-slate-800 dark:text-slate-100 border border-slate-200 dark:border-slate-800 px-4 py-2.5 font-bold;
+}
+
+.markdown-body td {
+  @apply border border-slate-200 dark:border-slate-800 px-4 py-2 text-slate-600 dark:text-slate-400;
+}
+
+.markdown-body tr:nth-child(even) {
+  @apply bg-slate-50/50 dark:bg-slate-900/30;
+}
+
+/* Image styles */
+.markdown-body img {
+  @apply max-w-full h-auto rounded-xl mx-auto my-6 border border-slate-200/60 dark:border-slate-800 shadow-md;
+}
+
+/* Video styles */
+.markdown-body iframe {
+  @apply w-full aspect-video rounded-xl border border-slate-200/60 dark:border-slate-800 shadow-lg my-6;
+}
+
+/* Text formatting tweaks */
+.markdown-body del {
+  @apply text-slate-400 line-through;
+}
+
+.markdown-body sub {
+  @apply text-xs align-sub;
+}
+
+.markdown-body sup {
+  @apply text-xs align-super;
+}
+

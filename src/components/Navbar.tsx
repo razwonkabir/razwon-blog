@@ -77,14 +77,14 @@ export default function Navbar() {
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         {/* Brand Logo with Site Logo */}
         <div className="flex items-center gap-2">
-          <Link to="/" id="brand-logo" className="flex items-center gap-2.5 font-display text-xl sm:text-2xl font-bold tracking-tight text-slate-900 dark:text-white hover:opacity-90">
+          <Link to="/" id="brand-logo" className="flex items-center gap-2 font-display text-lg sm:text-2xl font-extrabold tracking-tight text-slate-900 dark:text-white hover:opacity-90">
             <img 
               src={siteLogo} 
               alt="Skyline Logo" 
               className="h-8 w-8 rounded-full object-cover border border-indigo-500/50 shadow" 
               referrerPolicy="no-referrer"
             />
-            <span className="hidden sm:inline">Skyline 2026</span>
+            <span className="inline">Skyline 2026</span>
           </Link>
         </div>
 
@@ -187,29 +187,28 @@ export default function Navbar() {
               </button>
             </div>
           )}
-
-          {/* External Link Section (IOI Command Center) */}
-          <a
-            href="https://ioi.razwon.xyz"
-            target="_blank"
-            rel="noopener noreferrer"
-            id="ioi-command-center-link"
-            className="group relative hidden xs:inline-flex items-center gap-1.5 overflow-hidden rounded-full bg-gradient-to-r from-indigo-600 to-purple-600 px-3.5 py-1.5 text-[11px] font-semibold text-white shadow shadow-indigo-500/20 transition-all hover:from-indigo-500 hover:to-purple-500 active:scale-95"
-          >
-            <span className="relative flex h-1.5 w-1.5">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-indigo-300"></span>
-            </span>
-            <span className="font-mono">IOI</span>
-            <Globe className="h-3 w-3 transition-transform group-hover:rotate-12" />
-          </a>
         </div>
       </div>
 
       {/* Mobile Navigation bar bottom */}
       <div className="md:hidden flex items-center justify-around border-t border-slate-200 dark:border-slate-800/60 bg-white dark:bg-slate-950 py-2.5 px-4 transition-colors duration-300">
-        {navItems.filter(item => !item.isExternal).map((item) => {
+        {navItems.map((item) => {
           const active = isActive(item.path);
+          if (item.isExternal) {
+            return (
+              <a
+                key={item.path}
+                href={item.path}
+                target="_blank"
+                rel="noopener noreferrer"
+                id={`mobile-nav-link-${item.name.toLowerCase().replace(/\s+/g, '-')}`}
+                className="flex flex-col items-center gap-1 text-[10px] font-semibold text-slate-500 hover:text-indigo-600 dark:text-slate-400 dark:hover:text-indigo-400 transition-colors"
+              >
+                <item.icon className="h-4.5 w-4.5 text-indigo-500" />
+                <span>{item.name}</span>
+              </a>
+            );
+          }
           return (
             <Link
               key={item.path}

@@ -5,6 +5,8 @@ import { db } from '../firebase';
 import { BlogPost } from '../types';
 import { motion } from 'motion/react';
 import Markdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+import rehypeRaw from 'rehype-raw';
 import { ArrowLeft, Calendar, Clock, User, Tag, Share2, Check, FolderOpen } from 'lucide-react';
 
 export default function PostDetails() {
@@ -170,7 +172,7 @@ export default function PostDetails() {
         {/* Render Markdown Content */}
         <article className="prose max-w-none">
           <div className="markdown-body">
-            <Markdown>{post.content}</Markdown>
+            <Markdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]}>{post.content}</Markdown>
           </div>
         </article>
 

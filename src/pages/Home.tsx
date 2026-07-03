@@ -103,7 +103,7 @@ export default function Home() {
             <div className="relative z-10">
               <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 rounded-full text-[10px] font-bold uppercase tracking-widest mb-6">
                 <Sparkles className="h-3 w-3" />
-                <span>Competitive Programmer Blog</span>
+                <span>Razwon Kabir Famim</span>
               </span>
               <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 dark:text-white mb-4 leading-tight font-display tracking-tight">
                 Building a Legacy of Logic: Algorithms, Systems, and SBIR
@@ -117,11 +117,13 @@ export default function Home() {
           {/* Grid Item 2: Command Center Quick Access */}
           <div className="md:col-span-4 bg-gradient-to-br from-indigo-600 to-purple-600 border border-indigo-400 rounded-3xl p-8 flex flex-col justify-between text-white shadow-xl relative overflow-hidden group">
             <div className="absolute -right-12 -bottom-12 w-48 h-48 bg-white/5 rounded-full blur-2xl"></div>
-            <div className="relative z-10">
-              <h3 className="text-2xl font-bold mb-2 font-display tracking-tight text-white">IOI Command Center</h3>
-              <p className="text-indigo-100 text-sm leading-relaxed">Interactive Competitive Programing progress monitoring, code writing, error and learning log and Browser based C++ Compiler and Code managing Hub.</p>
+            <div className="relative z-10 my-auto flex flex-col justify-center">
+              <h3 className="text-2xl sm:text-3xl font-extrabold mb-3 font-display tracking-tight text-white leading-tight">IOI Command Center</h3>
+              <p className="text-indigo-100 text-xs sm:text-sm md:text-base font-medium leading-relaxed">
+                Interactive Competitive Programming progress monitoring, code writing, error &amp; learning log, and our browser-based C++ Compiler and Code Managing Hub.
+              </p>
             </div>
-            <div className="relative z-10 flex flex-col gap-4 mt-8 md:mt-0">
+            <div className="relative z-10 flex flex-col gap-4 mt-6 md:mt-2">
               <div className="flex justify-between items-center text-xs border-b border-indigo-400/50 pb-2.5">
                 <span className="text-indigo-200 font-medium">System Status</span>
                 <span className="flex items-center gap-1.5 font-bold">
@@ -136,7 +138,7 @@ export default function Home() {
                 href="https://ioi.razwon.xyz" 
                 target="_blank" 
                 rel="noopener noreferrer" 
-                className="mt-2 w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-white/15 hover:bg-white/25 border border-white/20 rounded-xl text-xs font-semibold tracking-wide transition-all group-hover:bg-white/20"
+                className="mt-1 w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-white/15 hover:bg-white/25 border border-white/20 rounded-xl text-xs font-semibold tracking-wide transition-all group-hover:bg-white/20"
               >
                 <span>Access Command Hub</span>
                 <ArrowUpRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
@@ -254,11 +256,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Newsletter Subscription Section */}
-      <section className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-        <NewsletterSubscription />
-      </section>
-
       {/* Main Publications Archive Section */}
       <main className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
         
@@ -372,6 +369,11 @@ export default function Home() {
           </div>
         )}
       </main>
+
+      {/* Newsletter Subscription Section placed after All Publications archive */}
+      <section className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+        <NewsletterSubscription />
+      </section>
     </motion.div>
   );
 }
