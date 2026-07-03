@@ -40,11 +40,21 @@ function AppContent() {
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
             <div className="flex items-center gap-1.5">
               <Terminal className="h-4 w-4 text-indigo-500" />
-              <span>Razwon Blog &copy; {new Date().getFullYear()}</span>
+              <span>Razwon Kabir Famim &copy; 2026, All rights reserved.</span>
             </div>
             <div className="flex items-center gap-2">
               <Cpu className="h-3.5 w-3.5 text-slate-300 dark:text-slate-700" />
-              <span>Engineered with React 19, Vite, &amp; Cloud Firestore</span>
+              <span>
+                Developed and Designed by{' '}
+                <a 
+                  href="https://github.com/razwonkabir" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="bg-gradient-to-r from-red-500 via-orange-500 via-yellow-500 via-green-500 via-blue-500 to-indigo-500 bg-clip-text text-transparent font-extrabold hover:opacity-80 transition-all"
+                >
+                  RK GRAPHICS
+                </a>
+              </span>
             </div>
           </div>
         </footer>

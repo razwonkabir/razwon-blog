@@ -6,6 +6,7 @@ import { BlogPost } from '../types';
 import { SEED_POSTS } from '../data/seedData';
 import { motion } from 'motion/react';
 import { Search, Calendar, Clock, Tag, ArrowRight, Sparkles, BookOpen, ArrowUpRight, Cpu, FolderOpen, RefreshCw } from 'lucide-react';
+import NewsletterSubscription from '../components/NewsletterSubscription';
 
 export default function Home() {
   const [posts, setPosts] = useState<BlogPost[]>([]);
@@ -102,13 +103,13 @@ export default function Home() {
             <div className="relative z-10">
               <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 rounded-full text-[10px] font-bold uppercase tracking-widest mb-6">
                 <Sparkles className="h-3 w-3" />
-                <span>Developer Blog</span>
+                <span>Competitive Programmer Blog</span>
               </span>
               <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 dark:text-white mb-4 leading-tight font-display tracking-tight">
-                Crafting clean, high-performance web architectures.
+                Building a Legacy of Logic: Algorithms, Systems, and SBIR
               </h1>
               <p className="text-slate-600 dark:text-slate-400 text-sm sm:text-base lg:text-lg max-w-xl leading-relaxed">
-                A space for deep dives into modern frontend architectures, Google Gemini integrations, and serverless engineering using Firebase Firestore.
+                Welcome to my development hub. This is a space dedicated to my journey mastering C++, dismantling complex data structures for competitive programming (IOI/ICPC), and documenting advanced core science. Beyond code, this blog tracks the computational blueprint for Socio-Bio-Informatics and Remediology (SBIR)—engineering software and robotics to restore systemic equilibrium to human and biological systems.
               </p>
             </div>
           </section>
@@ -118,7 +119,7 @@ export default function Home() {
             <div className="absolute -right-12 -bottom-12 w-48 h-48 bg-white/5 rounded-full blur-2xl"></div>
             <div className="relative z-10">
               <h3 className="text-2xl font-bold mb-2 font-display tracking-tight text-white">IOI Command Center</h3>
-              <p className="text-indigo-100 text-sm leading-relaxed">Real-time infrastructure monitoring and system deployment hub.</p>
+              <p className="text-indigo-100 text-sm leading-relaxed">Interactive Competitive Programing progress monitoring, code writing, error and learning log and Browser based C++ Compiler and Code managing Hub.</p>
             </div>
             <div className="relative z-10 flex flex-col gap-4 mt-8 md:mt-0">
               <div className="flex justify-between items-center text-xs border-b border-indigo-400/50 pb-2.5">
@@ -130,10 +131,6 @@ export default function Home() {
                   </span>
                   <span>ONLINE</span>
                 </span>
-              </div>
-              <div className="flex justify-between items-center text-xs border-b border-indigo-400/50 pb-2.5">
-                <span className="text-indigo-200 font-medium">Active Nodes</span>
-                <span className="font-bold font-mono text-indigo-50">12</span>
               </div>
               <a 
                 href="https://ioi.razwon.xyz" 
@@ -148,7 +145,7 @@ export default function Home() {
           </div>
 
           {/* Grid Item 3: Latest Posts Mini-Feed */}
-          <div className="md:col-span-5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800/80 rounded-3xl p-6 sm:p-8 flex flex-col justify-between shadow-sm dark:shadow-xl transition-colors duration-300">
+          <div className="md:col-span-7 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800/80 rounded-3xl p-6 sm:p-8 flex flex-col justify-between shadow-sm dark:shadow-xl transition-colors duration-300">
             <div>
               <div className="flex justify-between items-center mb-6">
                 <h2 className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest">Recent Publications</h2>
@@ -183,20 +180,8 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Grid Item 4: Stats Card */}
-          <div className="md:col-span-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800/80 rounded-3xl p-6 sm:p-8 flex flex-col justify-center shadow-sm dark:shadow-xl transition-colors duration-300">
-            <p className="text-slate-400 dark:text-slate-500 text-xs font-bold uppercase mb-2">Dynamic Reach</p>
-            <p className="text-4xl font-extrabold text-slate-900 dark:text-white font-display tracking-tight">
-              {loading ? '...' : totalPosts * 120 + 342}
-            </p>
-            <div className="mt-4 w-full bg-slate-100 dark:bg-slate-800 h-1.5 rounded-full overflow-hidden">
-              <div className="bg-gradient-to-r from-indigo-500 to-purple-500 w-[78%] h-full rounded-full"></div>
-            </div>
-            <p className="text-[10px] text-slate-400 dark:text-slate-500 mt-2.5 font-mono">+14% activity index this week</p>
-          </div>
-
-          {/* Grid Item 5: Combined Search & Filters */}
-          <div className="md:col-span-4 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800/80 rounded-3xl p-6 sm:p-8 shadow-sm dark:shadow-xl flex flex-col justify-between transition-colors duration-300">
+          {/* Grid Item 4: Combined Search & Filters */}
+          <div className="md:col-span-5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800/80 rounded-3xl p-6 sm:p-8 shadow-sm dark:shadow-xl flex flex-col justify-between transition-colors duration-300">
             <div>
               <p className="text-slate-400 dark:text-slate-500 text-xs font-bold uppercase mb-4">Search &amp; Filter</p>
               <div className="relative mb-4">
@@ -267,6 +252,11 @@ export default function Home() {
           </div>
 
         </div>
+      </section>
+
+      {/* Newsletter Subscription Section */}
+      <section className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+        <NewsletterSubscription />
       </section>
 
       {/* Main Publications Archive Section */}

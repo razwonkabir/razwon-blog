@@ -11,7 +11,8 @@ import {
   Search, 
   Settings, 
   LogOut,
-  ShieldCheck
+  ShieldCheck,
+  Code
 } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
 import { auth } from '../firebase';
@@ -68,6 +69,7 @@ export default function Navbar() {
     { name: 'Home', path: '/', icon: Home },
     { name: 'Blog', path: '/posts', icon: BookOpen },
     { name: 'About', path: '/about', icon: User },
+    { name: 'CMD CENTER', path: 'https://ioi.razwon.xyz', icon: Code, isExternal: true },
   ];
 
   return (
@@ -78,18 +80,33 @@ export default function Navbar() {
           <Link to="/" id="brand-logo" className="flex items-center gap-2.5 font-display text-xl sm:text-2xl font-bold tracking-tight text-slate-900 dark:text-white hover:opacity-90">
             <img 
               src={siteLogo} 
-              alt="Razwon Logo" 
+              alt="Skyline Logo" 
               className="h-8 w-8 rounded-full object-cover border border-indigo-500/50 shadow" 
               referrerPolicy="no-referrer"
             />
-            <span className="hidden sm:inline">Razwon</span>
+            <span className="hidden sm:inline">Skyline 2026</span>
           </Link>
         </div>
 
-        {/* Navigation Items (Public view: Home, Blog, About) */}
+        {/* Navigation Items (Public view: Home, Blog, About, and IOI External) */}
         <nav id="main-navigation" className="hidden md:flex items-center gap-6">
           {navItems.map((item) => {
             const active = isActive(item.path);
+            if (item.isExternal) {
+              return (
+                <a
+                  key={item.path}
+                  href={item.path}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  id={`nav-link-${item.name.toLowerCase().replace(/\s+/g, '-')}`}
+                  className="flex items-center gap-1.5 text-sm font-medium text-slate-500 hover:text-indigo-600 dark:text-slate-400 dark:hover:text-indigo-400 transition-colors duration-200"
+                >
+                  <item.icon className="h-4 w-4" />
+                  <span>{item.name}</span>
+                </a>
+              );
+            }
             return (
               <Link
                 key={item.path}
@@ -191,7 +208,7 @@ export default function Navbar() {
 
       {/* Mobile Navigation bar bottom */}
       <div className="md:hidden flex items-center justify-around border-t border-slate-200 dark:border-slate-800/60 bg-white dark:bg-slate-950 py-2.5 px-4 transition-colors duration-300">
-        {navItems.map((item) => {
+        {navItems.filter(item => !item.isExternal).map((item) => {
           const active = isActive(item.path);
           return (
             <Link
@@ -207,16 +224,6 @@ export default function Navbar() {
             </Link>
           );
         })}
-        {/* Admin settings icon on mobile */}
-        <Link
-          to="/write"
-          className={`flex flex-col items-center gap-1 text-[10px] font-semibold transition-colors ${
-            isActive('/write') || isActive('/admin') ? 'text-indigo-600 dark:text-indigo-400' : 'text-slate-500 dark:text-slate-400'
-          }`}
-        >
-          <Settings className="h-4.5 w-4.5" />
-          <span>Admin</span>
-        </Link>
       </div>
     </header>
   );
