@@ -1,0 +1,50 @@
+{
+  "entities": {
+    "BlogPost": {
+      "title": "BlogPost",
+      "description": "A single publication or article inside the Razwon developer blog.",
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string",
+          "description": "The publication title."
+        },
+        "summary": {
+          "type": "string",
+          "description": "A brief summary of the article's contents."
+        },
+        "content": {
+          "type": "string",
+          "description": "Complete markdown-formatted content body."
+        },
+        "tags": {
+          "type": "array",
+          "description": "List of tags associated with this post."
+        },
+        "categories": {
+          "type": "array",
+          "description": "List of categories associated with this post."
+        },
+        "author": {
+          "type": "string",
+          "description": "Name of the post author."
+        },
+        "createdAt": {
+          "type": "number",
+          "description": "Timestamp when the post was published."
+        },
+        "readTime": {
+          "type": "string",
+          "description": "Estimated duration to read the article."
+        }
+      },
+      "required": ["title", "summary", "content", "tags", "categories", "author", "createdAt", "readTime"]
+    }
+  },
+  "firestore": {
+    "/posts/{postId}": {
+      "schema": "BlogPost",
+      "description": "Global collection containing all blog publications."
+    }
+  }
+}

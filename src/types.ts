@@ -4,7 +4,9 @@ export interface BlogPost {
   summary: string;
   content: string;
   tags: string[];
+  categories: string[];
   author: string;
   createdAt: number; // UTC Timestamp in ms
   readTime: string;
+  coverImage?: string;
 }

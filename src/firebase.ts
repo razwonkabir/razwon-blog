@@ -1,6 +1,7 @@
 /// <reference types="vite/client" />
 import { initializeApp, getApps, getApp } from 'firebase/app';
 import { getFirestore } from 'firebase/firestore';
+import { getAuth, GoogleAuthProvider } from 'firebase/auth';
 
 // Firebase configuration.
 // We use public Vite environment variables or fallback to the provisioned Applet values.
@@ -21,4 +22,8 @@ const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
 // Initialize Firestore with custom databaseId
 const db = getFirestore(app, databaseId);
 
-export { app, db };
+// Initialize Firebase Auth
+const auth = getAuth(app);
+const provider = new GoogleAuthProvider();
+
+export { app, db, auth, provider };

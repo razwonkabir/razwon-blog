@@ -1,6 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
 @import "tailwindcss";
 
+@variant dark (&:where(.dark, .dark *));
+
 @theme {
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
@@ -9,23 +11,23 @@
 
 /* Markdown styling classes */
 .markdown-body {
-  @apply font-sans text-slate-300 leading-relaxed text-base sm:text-lg;
+  @apply font-sans text-slate-700 dark:text-slate-300 leading-relaxed text-base sm:text-lg;
 }
 
 .markdown-body h1 {
-  @apply font-display text-2xl sm:text-3xl font-extrabold text-white mt-8 mb-4 border-b border-slate-900 pb-2 tracking-tight;
+  @apply font-display text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white mt-8 mb-4 border-b border-slate-200 dark:border-slate-900 pb-2 tracking-tight;
 }
 
 .markdown-body h2 {
-  @apply font-display text-xl sm:text-2xl font-bold text-white mt-6 mb-3 tracking-tight;
+  @apply font-display text-xl sm:text-2xl font-bold text-slate-900 dark:text-white mt-6 mb-3 tracking-tight;
 }
 
 .markdown-body h3 {
-  @apply font-display text-lg sm:text-xl font-bold text-indigo-400 mt-4 mb-2;
+  @apply font-display text-lg sm:text-xl font-bold text-indigo-600 dark:text-indigo-400 mt-4 mb-2;
 }
 
 .markdown-body p {
-  @apply mb-4 text-slate-300;
+  @apply mb-4 text-slate-700 dark:text-slate-300;
 }
 
 .markdown-body ul {
@@ -37,21 +39,21 @@
 }
 
 .markdown-body li {
-  @apply text-slate-300;
+  @apply text-slate-700 dark:text-slate-300;
 }
 
 .markdown-body pre {
-  @apply bg-slate-900 border border-slate-800/80 rounded-xl p-4 my-6 overflow-x-auto font-mono text-sm text-slate-200 shadow-md;
+  @apply bg-slate-950 border border-slate-800/80 rounded-xl p-4 my-6 overflow-x-auto font-mono text-sm text-slate-200 shadow-md;
 }
 
 .markdown-body code:not(pre code) {
-  @apply bg-slate-900 text-indigo-400 px-1.5 py-0.5 rounded text-sm font-mono border border-slate-800/50;
+  @apply bg-slate-100 dark:bg-slate-900 text-indigo-600 dark:text-indigo-400 px-1.5 py-0.5 rounded text-sm font-mono border border-slate-200 dark:border-slate-800/50;
 }
 
 .markdown-body blockquote {
-  @apply border-l-4 border-indigo-500 bg-slate-900/40 px-4 py-3 rounded-r-xl italic my-6 text-slate-400;
+  @apply border-l-4 border-indigo-500 bg-slate-100 dark:bg-slate-900/40 px-4 py-3 rounded-r-xl italic my-6 text-slate-500 dark:text-slate-400;
 }
 
 .markdown-body a {
-  @apply text-indigo-400 hover:text-indigo-300 underline underline-offset-4 transition-colors;
+  @apply text-indigo-600 dark:text-indigo-400 hover:text-indigo-500 dark:hover:text-indigo-300 underline underline-offset-4 transition-colors;
 }

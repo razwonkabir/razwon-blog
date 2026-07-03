@@ -65,6 +65,7 @@ During this transitions, React will keep the current UI active and interactive, 
 - **Cleaner codebase**: Native form integrations reduce React-Hook-Form dependencies for simple forms.
 `,
     tags: ["React", "JavaScript", "Frontend"],
+    categories: ["Development", "React"],
     author: "Razwon",
     createdAt: Date.now() - 3600000 * 24 * 3, // 3 days ago
     readTime: "5 min read"
@@ -167,6 +168,7 @@ export default function Summarizer() {
 By offloading the API key to our Express proxy server, we keep our application completely secure while delivering a state-of-the-art AI feature.
 `,
     tags: ["Gemini", "AI", "TypeScript"],
+    categories: ["AI", "Development"],
     author: "Razwon",
     createdAt: Date.now() - 3600000 * 24 * 1, // 1 day ago
     readTime: "4 min read"
@@ -206,6 +208,7 @@ The \`tailwind.config.js\` file is officially a thing of the past. Config now li
 This ensures your build pipelines stay responsive, and your components look incredibly polished on any platform.
 `,
     tags: ["Tailwind", "CSS", "Design"],
+    categories: ["Design", "Frontend"],
     author: "Razwon",
     createdAt: Date.now() - 3600000 * 12, // 12 hours ago
     readTime: "3 min read"
