@@ -9,4 +9,5 @@ export interface BlogPost {
   createdAt: number; // UTC Timestamp in ms
   readTime: string;
   coverImage?: string;
+  status?: 'draft' | 'published';
 }

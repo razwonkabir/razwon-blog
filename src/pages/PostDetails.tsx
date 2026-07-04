@@ -8,6 +8,7 @@ import Markdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import rehypeRaw from 'rehype-raw';
 import { ArrowLeft, Calendar, Clock, User, Tag, Share2, Check, FolderOpen } from 'lucide-react';
+import { renderMathInMarkdown } from '../lib/math';
 
 export default function PostDetails() {
   const { id } = useParams<{ id: string }>();
@@ -172,7 +173,7 @@ export default function PostDetails() {
         {/* Render Markdown Content */}
         <article className="prose max-w-none">
           <div className="markdown-body">
-            <Markdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]}>{post.content}</Markdown>
+            <Markdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]}>{renderMathInMarkdown(post.content)}</Markdown>
           </div>
         </article>
 

@@ -7,6 +7,7 @@ import { motion } from 'motion/react';
 import Markdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import rehypeRaw from 'rehype-raw';
+import { renderMathInMarkdown } from '../lib/math';
 import { 
   PenTool, 
   Eye, 
@@ -134,8 +135,15 @@ export default function AdminDashboard() {
     }
   };
 
+  const [hasDraft, setHasDraft] = useState(false);
+
   useEffect(() => {
     fetchExistingPosts();
+    // Check for unfinished local draft on mount
+    const draftContent = localStorage.getItem('skyline_cms_draft_content');
+    if (draftContent && draftContent.trim()) {
+      setHasDraft(true);
+    }
   }, []);
 
   // Responsiveness tab adjustment
@@ -177,11 +185,23 @@ export default function AdminDashboard() {
       if (draftCategories) setCategoriesInput(draftCategories);
       
       setSuccess("Autosaved document draft restored successfully!");
+      setHasDraft(false);
       setTimeout(() => setSuccess(null), 3000);
     } else {
       setError("No auto-saved draft detected on this browser session.");
       setTimeout(() => setError(null), 3000);
     }
+  };
+
+  const handleDiscardDraft = () => {
+    localStorage.removeItem('skyline_cms_draft_content');
+    localStorage.removeItem('skyline_cms_draft_title');
+    localStorage.removeItem('skyline_cms_draft_summary');
+    localStorage.removeItem('skyline_cms_draft_tags');
+    localStorage.removeItem('skyline_cms_draft_categories');
+    setHasDraft(false);
+    setSuccess("Autosaved draft has been discarded.");
+    setTimeout(() => setSuccess(null), 3000);
   };
 
   // Record history for undo/redo
@@ -235,6 +255,32 @@ export default function AdminDashboard() {
         start + before.length + placeholder.length
       );
     }, 50);
+  };
+
+  const handlePaste = (e: React.ClipboardEvent<HTMLTextAreaElement>) => {
+    const htmlData = e.clipboardData.getData('text/html');
+    if (htmlData) {
+      e.preventDefault();
+      const markdown = htmlToMarkdown(htmlData);
+      if (markdown && markdown.trim()) {
+        recordHistory(content);
+        
+        const textarea = e.currentTarget;
+        const start = textarea.selectionStart;
+        const end = textarea.selectionEnd;
+        const text = textarea.value;
+        const beforeStr = text.substring(0, start);
+        const afterStr = text.substring(end);
+        
+        const newContent = beforeStr + markdown + afterStr;
+        setContent(newContent);
+        
+        setTimeout(() => {
+          textarea.focus();
+          textarea.setSelectionRange(start + markdown.length, start + markdown.length);
+        }, 50);
+      }
+    }
   };
 
   // Document templates inserters
@@ -334,8 +380,8 @@ export default function AdminDashboard() {
     }
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = async (e?: React.FormEvent, statusOverride?: 'draft' | 'published') => {
+    if (e) e.preventDefault();
     setError(null);
     setSuccess(null);
 
@@ -364,6 +410,9 @@ export default function AdminDashboard() {
       .map(cat => cat.trim())
       .filter(cat => cat.length > 0);
 
+    // Default to 'published' unless explicitly 'draft'
+    const targetStatus = statusOverride || 'published';
+
     const newPostData = {
       title: title.trim(),
       summary: summary.trim(),
@@ -372,7 +421,8 @@ export default function AdminDashboard() {
       categories: categories.length > 0 ? categories : ["General"],
       author: author.trim() || "Admin",
       readTime: readTime.trim() || "5 min read",
-      coverImage: coverImage.trim() || undefined
+      coverImage: coverImage.trim() || undefined,
+      status: targetStatus
     };
 
     try {
@@ -380,7 +430,7 @@ export default function AdminDashboard() {
         // UPDATE EXISTING POST
         const postDocRef = doc(db, 'posts', editingPostId);
         await updateDoc(postDocRef, newPostData);
-        setSuccess(`"${title.trim()}" updated successfully.`);
+        setSuccess(`"${title.trim()}" updated successfully as ${targetStatus}.`);
         setEditingPostId(null);
       } else {
         // CREATE NEW POST
@@ -389,11 +439,15 @@ export default function AdminDashboard() {
           ...newPostData,
           createdAt: Date.now()
         });
-        setSuccess(`"${title.trim()}" published successfully.`);
+        setSuccess(`"${title.trim()}" saved successfully as ${targetStatus}.`);
       }
       
       // Clear autosave cache on success submit
       localStorage.removeItem('skyline_cms_draft_content');
+      localStorage.removeItem('skyline_cms_draft_title');
+      localStorage.removeItem('skyline_cms_draft_summary');
+      localStorage.removeItem('skyline_cms_draft_tags');
+      localStorage.removeItem('skyline_cms_draft_categories');
 
       // Reset Form fields
       setTitle('');
@@ -491,6 +545,36 @@ export default function AdminDashboard() {
         </header>
 
         {/* Global Notifications */}
+        {hasDraft && (
+          <div className="mb-4 rounded-2xl border border-amber-500/30 bg-amber-500/10 dark:bg-amber-500/5 p-4 text-xs text-amber-800 dark:text-amber-300 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-md transition-all">
+            <div className="flex items-start gap-3">
+              <History className="h-5 w-5 shrink-0 text-amber-500 animate-pulse mt-0.5" />
+              <div>
+                <p className="font-bold text-sm">Unfinished Draft Found</p>
+                <p className="mt-0.5 text-slate-600 dark:text-slate-400 font-medium">
+                  We recovered an autosaved draft ("{localStorage.getItem('skyline_cms_draft_title') || 'Untitled Publication'}") on this browser. Restore it to continue editing?
+                </p>
+              </div>
+            </div>
+            <div className="flex items-center gap-2 self-end sm:self-auto shrink-0">
+              <button
+                type="button"
+                onClick={handleLoadDraft}
+                className="bg-amber-600 hover:bg-amber-500 text-white font-bold px-3 py-1.5 rounded-lg cursor-pointer transition-colors text-xs"
+              >
+                Restore Draft
+              </button>
+              <button
+                type="button"
+                onClick={handleDiscardDraft}
+                className="bg-slate-200 hover:bg-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 font-bold px-3 py-1.5 rounded-lg cursor-pointer transition-colors text-xs"
+              >
+                Discard
+              </button>
+            </div>
+          </div>
+        )}
+
         {error && (
           <div className="mb-4 rounded-xl border border-red-500/20 bg-red-500/10 p-4 text-xs text-red-500 flex items-start gap-3 shadow-sm font-mono">
             <AlertCircle className="h-4.5 w-4.5 shrink-0" />
@@ -594,18 +678,26 @@ export default function AdminDashboard() {
                 </div>
 
                 {/* Save to Firestore actions */}
-                <div className="pt-3 border-t border-slate-100 dark:border-slate-800">
+                <div className="pt-3 border-t border-slate-100 dark:border-slate-800 flex flex-col sm:flex-row gap-2">
                   <button
-                    onClick={handleSubmit}
+                    onClick={(e) => handleSubmit(e, 'draft')}
                     disabled={submitting}
-                    className="w-full flex items-center justify-center gap-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs py-2.5 shadow-md shadow-indigo-500/10 cursor-pointer disabled:opacity-50"
+                    className="flex-1 flex items-center justify-center gap-1.5 rounded-xl border border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-900 text-slate-700 dark:text-slate-300 font-bold text-xs py-2 px-3 shadow-sm cursor-pointer disabled:opacity-50"
+                  >
+                    <PenTool className="h-3 w-3 shrink-0" />
+                    <span>Save Draft</span>
+                  </button>
+                  <button
+                    onClick={(e) => handleSubmit(e, 'published')}
+                    disabled={submitting}
+                    className="flex-1 flex items-center justify-center gap-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs py-2 px-3 shadow-md shadow-indigo-500/10 cursor-pointer disabled:opacity-50"
                   >
                     {submitting ? (
                       <span className="h-3 w-3 animate-spin rounded-full border-2 border-white/20 border-t-white" />
                     ) : (
-                      <Send className="h-3.5 w-3.5" />
+                      <Send className="h-3 w-3 shrink-0" />
                     )}
-                    <span>{editingPostId ? 'Save Edits to Cloud' : 'Publish Document'}</span>
+                    <span>{editingPostId ? 'Save & Publish' : 'Publish Post'}</span>
                   </button>
                 </div>
               </div>
@@ -1136,6 +1228,7 @@ export default function AdminDashboard() {
                         recordHistory(content);
                         setContent(e.target.value);
                       }}
+                      onPaste={handlePaste}
                       placeholder="Begin composing your competitive solution or bio-informatics research log using MS Word styling controls..."
                       className={`w-full flex-1 resize-none bg-transparent outline-none border-none text-slate-800 dark:text-slate-100 leading-relaxed placeholder-slate-400/80 font-medium ${
                         selectedFont === 'font-sans' ? 'font-sans' : 
@@ -1280,7 +1373,7 @@ export default function AdminDashboard() {
                       <article className="prose max-w-none pt-4 text-left">
                         <div className="markdown-body">
                           {content.trim() ? (
-                            <Markdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]}>{content}</Markdown>
+                            <Markdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]}>{renderMathInMarkdown(content)}</Markdown>
                           ) : (
                             <p className="text-slate-400 dark:text-slate-500 italic font-mono text-xs">Write some Markdown content to view real-time typography...</p>
                           )}
@@ -1374,8 +1467,13 @@ export default function AdminDashboard() {
                       }`}
                     >
                       <td className="py-3.5 px-4 font-medium text-slate-900 dark:text-white">
-                        <div className="max-w-md truncate">
-                          {post.title}
+                        <div className="max-w-md truncate flex items-center gap-2">
+                          <span className="truncate">{post.title}</span>
+                          {post.status === 'draft' && (
+                            <span className="shrink-0 inline-flex items-center rounded bg-amber-500/15 text-amber-600 dark:text-amber-400 border border-amber-500/20 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wider font-mono">
+                              Draft
+                            </span>
+                          )}
                         </div>
                         <div className="text-[10px] text-slate-400 dark:text-slate-500 mt-0.5 truncate max-w-md">
                           {post.summary}
@@ -1425,4 +1523,141 @@ export default function AdminDashboard() {
       </div>
     </motion.div>
   );
+}
+
+function htmlToMarkdown(htmlString: string): string {
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(htmlString, 'text/html');
+  const cleanBody = doc.body;
+  
+  function serializeNode(node: Node): string {
+    if (node.nodeType === Node.TEXT_NODE) {
+      return node.textContent || '';
+    }
+    if (node.nodeType !== Node.ELEMENT_NODE) {
+      return '';
+    }
+    
+    const element = node as HTMLElement;
+    const tagName = element.tagName.toLowerCase();
+    
+    let childrenText = '';
+    element.childNodes.forEach(child => {
+      childrenText += serializeNode(child);
+    });
+    
+    const styleAttr = element.getAttribute('style') || '';
+    const colorMatch = styleAttr.match(/(?:^|;)\s*color\s*:\s*([^;]+)/i);
+    const bgMatch = styleAttr.match(/(?:^|;)\s*background-color\s*:\s*([^;]+)/i);
+    
+    let wrapped = childrenText;
+    if (colorMatch && wrapped.trim()) {
+      const colorVal = colorMatch[1].trim();
+      wrapped = `<span style="color: ${colorVal}">${wrapped}</span>`;
+    }
+    if (bgMatch && wrapped.trim()) {
+      const bgVal = bgMatch[1].trim();
+      wrapped = `<span style="background-color: ${bgVal}">${wrapped}</span>`;
+    }
+    
+    switch (tagName) {
+      case 'strong':
+      case 'b':
+        return `**${wrapped}**`;
+      case 'em':
+      case 'i':
+        return `*${wrapped}*`;
+      case 'del':
+      case 's':
+      case 'strike':
+        return `~~${wrapped}~~`;
+      case 'sub':
+        return `<sub>${wrapped}</sub>`;
+      case 'sup':
+        return `<sup>${wrapped}</sup>`;
+      case 'code':
+        if (element.parentElement && element.parentElement.tagName.toLowerCase() === 'pre') {
+          return wrapped;
+        }
+        return `\`${wrapped}\``;
+      case 'pre':
+        return `\n\`\`\`\n${wrapped.trim()}\n\`\`\`\n`;
+      case 'p':
+        return `\n\n${wrapped.trim()}\n\n`;
+      case 'br':
+        return '\n';
+      case 'h1':
+        return `\n\n# ${wrapped.trim()}\n\n`;
+      case 'h2':
+        return `\n\n## ${wrapped.trim()}\n\n`;
+      case 'h3':
+        return `\n\n### ${wrapped.trim()}\n\n`;
+      case 'h4':
+        return `\n\n#### ${wrapped.trim()}\n\n`;
+      case 'h5':
+        return `\n\n##### ${wrapped.trim()}\n\n`;
+      case 'h6':
+        return `\n\n###### ${wrapped.trim()}\n\n`;
+      case 'a':
+        const href = element.getAttribute('href') || '#';
+        return `[${wrapped}](${href})`;
+      case 'img':
+        const src = element.getAttribute('src') || '';
+        const alt = element.getAttribute('alt') || 'image';
+        return `![${alt}](${src})`;
+      case 'blockquote':
+        return `\n> ${wrapped.trim().replace(/\n/g, '\n> ')}\n\n`;
+      case 'li':
+        return `${wrapped.trim()}\n`;
+      case 'ul': {
+        const items = Array.from(element.children)
+          .filter(c => c.tagName.toLowerCase() === 'li')
+          .map(c => `* ${serializeNode(c).trim()}`);
+        return `\n\n${items.join('\n')}\n\n`;
+      }
+      case 'ol': {
+        const items = Array.from(element.children)
+          .filter(c => c.tagName.toLowerCase() === 'li')
+          .map((c, i) => `${i + 1}. ${serializeNode(c).trim()}`);
+        return `\n\n${items.join('\n')}\n\n`;
+      }
+      case 'table': {
+        let tableMd = '\n\n';
+        const rows = Array.from(element.querySelectorAll('tr'));
+        let hasHeaders = false;
+        
+        rows.forEach((row, rowIndex) => {
+          const cells = Array.from(row.querySelectorAll('th, td'));
+          if (cells.length > 0) {
+            const cellTexts = cells.map(cell => serializeNode(cell).trim().replace(/\|/g, '\\|'));
+            
+            const isHeader = row.querySelector('th') !== null || rowIndex === 0;
+            if (isHeader && !hasHeaders) {
+              hasHeaders = true;
+            }
+            
+            tableMd += `| ${cellTexts.join(' | ')} |\n`;
+            
+            if (rowIndex === 0) {
+              const separator = Array(cells.length).fill('---');
+              tableMd += `| ${separator.join(' | ')} |\n`;
+            }
+          }
+        });
+        tableMd += '\n';
+        return tableMd;
+      }
+      default:
+        return wrapped;
+    }
+  }
+
+  let result = '';
+  cleanBody.childNodes.forEach(child => {
+    result += serializeNode(child);
+  });
+  
+  return result
+    .replace(/\n{3,}/g, '\n\n')
+    .trim();
 }

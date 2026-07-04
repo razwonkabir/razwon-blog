@@ -53,7 +53,9 @@ export default function Home() {
 
       // Sort by createdAt descending
       list.sort((a, b) => b.createdAt - a.createdAt);
-      setPosts(list);
+      // Filter out draft posts so only published ones are shown to the public
+      const publishedList = list.filter(p => p.status !== 'draft');
+      setPosts(publishedList);
     } catch (error) {
       console.error("Error fetching posts:", error);
     } finally {
@@ -102,8 +104,8 @@ export default function Home() {
             
             <div className="relative z-10">
               <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 rounded-full text-[10px] font-bold uppercase tracking-widest mb-6">
-                <Sparkles className="h-3 w-3" />
-                <span>Razwon Kabir Famim</span>
+                <Sparkles className="h-3 w-3 shrink-0" />
+                <span className="font-vibes text-xl font-normal normal-case tracking-normal select-none -my-1">Razwon Kabir Famim</span>
               </span>
               <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 dark:text-white mb-4 leading-tight font-display tracking-tight">
                 Building a Legacy of Logic: Algorithms, Systems, and SBIR

@@ -68,7 +68,7 @@ export default function About() {
                   <span>Lead Architect</span>
                 </span>
               </div>
-              <h1 className="font-display text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white mt-3 tracking-tight">
+              <h1 className="font-vibes text-5xl sm:text-6xl font-normal text-slate-900 dark:text-white mt-2 select-none">
                 Razwon Kabir Famim
               </h1>
               <p className="mt-4 text-slate-600 dark:text-slate-400 text-sm sm:text-base leading-relaxed">

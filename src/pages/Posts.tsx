@@ -69,7 +69,9 @@ export default function Posts() {
       }
 
       list.sort((a, b) => b.createdAt - a.createdAt);
-      setPosts(list);
+      // Filter out draft posts so only published ones are shown to the public
+      const publishedList = list.filter(p => p.status !== 'draft');
+      setPosts(publishedList);
     } catch (error) {
       console.error("Error fetching posts:", error);
     } finally {

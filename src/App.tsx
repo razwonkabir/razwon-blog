@@ -40,7 +40,10 @@ function AppContent() {
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
             <div className="flex items-center gap-1.5">
               <Terminal className="h-4 w-4 text-indigo-500" />
-              <span>Razwon Kabir Famim &copy; 2026, All rights reserved.</span>
+              <span className="flex items-center gap-1 text-[11px]">
+                <span className="font-vibes text-lg text-slate-800 dark:text-slate-200 select-none">Razwon Kabir Famim</span>
+                <span>&copy; 2026, All rights reserved.</span>
+              </span>
             </div>
             <div className="flex items-center gap-2">
               <Cpu className="h-3.5 w-3.5 text-slate-300 dark:text-slate-700" />
