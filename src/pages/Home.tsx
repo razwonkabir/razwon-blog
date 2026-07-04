@@ -5,8 +5,9 @@ import { db } from '../firebase';
 import { BlogPost } from '../types';
 import { SEED_POSTS } from '../data/seedData';
 import { motion } from 'motion/react';
-import { Search, Calendar, Clock, Tag, ArrowRight, Sparkles, BookOpen, ArrowUpRight, Cpu, FolderOpen, RefreshCw } from 'lucide-react';
+import { Search, Calendar, Clock, Tag, ArrowRight, Sparkles, BookOpen, ArrowUpRight, Cpu, FolderOpen, RefreshCw, Eye, Shield, Globe, Mail } from 'lucide-react';
 import NewsletterSubscription from '../components/NewsletterSubscription';
+import siteLogo from '../assets/images/site_logo_1783046576955.png';
 
 export default function Home() {
   const [posts, setPosts] = useState<BlogPost[]>([]);
@@ -97,22 +98,62 @@ export default function Home() {
       <section className="mx-auto max-w-7xl px-4 pt-10 pb-8 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
           
-          {/* Grid Item 1: Hero Section */}
-          <section className="md:col-span-8 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800/80 rounded-3xl p-8 sm:p-10 flex flex-col justify-center relative overflow-hidden shadow-sm dark:shadow-2xl transition-colors duration-300">
+          {/* Grid Item 1: Hero Section Remixed with Profile Card details */}
+          <section className="md:col-span-8 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800/80 rounded-3xl p-6 sm:p-8 flex flex-col justify-center relative overflow-hidden shadow-sm dark:shadow-2xl transition-colors duration-300">
             <div className="absolute -top-24 -right-24 w-64 h-64 bg-indigo-600/15 dark:bg-indigo-600/20 rounded-full blur-[80px]"></div>
             <div className="absolute -bottom-24 -left-24 w-64 h-64 bg-purple-600/10 rounded-full blur-[80px]"></div>
             
-            <div className="relative z-10">
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 rounded-full text-[10px] font-bold uppercase tracking-widest mb-6">
-                <Sparkles className="h-3 w-3 shrink-0" />
-                <span className="font-vibes text-xl font-normal normal-case tracking-normal select-none -my-1">Razwon Kabir Famim</span>
-              </span>
-              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 dark:text-white mb-4 leading-tight font-display tracking-tight">
-                Building a Legacy of Logic: Algorithms, Systems, and SBIR
-              </h1>
-              <p className="text-slate-600 dark:text-slate-400 text-sm sm:text-base lg:text-lg max-w-xl leading-relaxed">
-                Welcome to my development hub. This is a space dedicated to my journey mastering C++, dismantling complex data structures for competitive programming (IOI/ICPC), and documenting advanced core science. Beyond code, this blog tracks the computational blueprint for Socio-Bio-Informatics and Remediology (SBIR)—engineering software and robotics to restore systemic equilibrium to human and biological systems.
-              </p>
+            {/* Top animated color bar indicator */}
+            <div className="absolute top-0 left-0 right-0 h-[4px] bg-gradient-to-r from-red-500 via-orange-500 via-yellow-500 via-green-500 via-blue-500 to-indigo-500"></div>
+
+            <div className="relative z-10 flex flex-col sm:flex-row items-center sm:items-start gap-6 sm:gap-8">
+              {/* Developer Avatar with pulsing online indicator */}
+              <div className="relative h-24 w-24 shrink-0 rounded-full bg-gradient-to-tr from-indigo-500 to-purple-500 p-1 shadow-lg">
+                <img 
+                  src={siteLogo} 
+                  alt="Razwon Kabir Famim Avatar" 
+                  className="h-full w-full rounded-full object-cover border-2 border-white dark:border-slate-900" 
+                  referrerPolicy="no-referrer"
+                />
+                <span className="absolute bottom-0 right-0 flex h-3.5 w-3.5">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-3.5 w-3.5 bg-green-500 border border-white dark:border-slate-900"></span>
+                </span>
+              </div>
+
+              {/* Main Contents */}
+              <div className="flex-1 text-left">
+                <div className="flex flex-wrap items-center justify-start gap-2 mb-3">
+                  <span className="inline-flex items-center gap-1 rounded-full bg-indigo-500/10 px-3 py-1 text-[10px] font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-widest border border-indigo-500/10 font-mono">
+                    <Shield className="h-3 w-3" />
+                    <span>Lead Architect</span>
+                  </span>
+                  <span className="inline-flex items-center gap-1 px-3 py-0.5 bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 rounded-full text-[10px] font-bold uppercase tracking-widest">
+                    <Sparkles className="h-3 w-3 shrink-0" />
+                    <span className="font-vibes text-lg font-normal normal-case tracking-normal select-none -my-1">Razwon Kabir Famim</span>
+                  </span>
+                </div>
+
+                <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-slate-900 dark:text-white mb-3 leading-tight font-display tracking-tight text-justify">
+                  Building a Legacy of Logic: Algorithms, Systems, and SBIR
+                </h1>
+                
+                <p className="text-slate-600 dark:text-slate-400 text-xs sm:text-sm leading-relaxed mb-4 text-justify">
+                  Welcome to my development hub. This is a space dedicated to my journey mastering C++, dismantling complex data structures for competitive programming (IOI/ICPC), and documenting advanced core science. Beyond code, this blog tracks the computational blueprint for Socio-Bio-Informatics and Remediology (SBIR)—engineering software and robotics to restore systemic equilibrium to human and biological systems.
+                </p>
+
+                {/* Social Quick Links */}
+                <div className="flex flex-wrap justify-start gap-3 text-slate-400 dark:text-slate-500">
+                  <a href="https://ioi.razwon.xyz" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 px-2.5 py-1 rounded-full bg-slate-50 dark:bg-slate-950 border border-slate-100 dark:border-slate-800 hover:text-indigo-600 dark:hover:text-white transition-all text-xs font-semibold">
+                    <Globe className="h-3 w-3 text-indigo-500" />
+                    <span>ioi.razwon.xyz</span>
+                  </a>
+                  <a href="mailto:termremo@gmail.com" className="flex items-center gap-1 px-2.5 py-1 rounded-full bg-slate-50 dark:bg-slate-950 border border-slate-100 dark:border-slate-800 hover:text-indigo-600 dark:hover:text-white transition-all text-xs font-semibold">
+                    <Mail className="h-3 w-3 text-rose-500" />
+                    <span>termremo@gmail.com</span>
+                  </a>
+                </div>
+              </div>
             </div>
           </section>
 
@@ -121,7 +162,7 @@ export default function Home() {
             <div className="absolute -right-12 -bottom-12 w-48 h-48 bg-white/5 rounded-full blur-2xl"></div>
             <div className="relative z-10 my-auto flex flex-col justify-center">
               <h3 className="text-2xl sm:text-3xl font-extrabold mb-3 font-display tracking-tight text-white leading-tight">IOI Command Center</h3>
-              <p className="text-indigo-100 text-xs sm:text-sm md:text-base font-medium leading-relaxed">
+              <p className="text-indigo-100 text-xs sm:text-sm md:text-base font-medium leading-relaxed text-justify">
                 Interactive Competitive Programming progress monitoring, code writing, error &amp; learning log, and our browser-based C++ Compiler and Code Managing Hub.
               </p>
             </div>
@@ -169,13 +210,22 @@ export default function Home() {
                   {posts.slice(0, 3).map((post) => (
                     <div key={post.id} className="group cursor-pointer border-b border-slate-100 dark:border-slate-800/40 pb-4 last:border-0 last:pb-0">
                       <Link to={`/posts/${post.id}`}>
-                        <p className="text-[10px] font-mono text-indigo-600 dark:text-indigo-400 mb-1 flex items-center gap-1.5">
+                        <p className="text-[10px] font-mono text-indigo-600 dark:text-indigo-400 mb-1 flex items-center gap-1.5 flex-wrap">
                           <span>{new Date(post.createdAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}</span>
                           <span>•</span>
                           <span>{post.readTime}</span>
+                          {post.views !== undefined && post.views > 0 && (
+                            <>
+                              <span>•</span>
+                              <span className="flex items-center gap-0.5">
+                                <Eye className="h-3 w-3 inline" />
+                                <span>{post.views} views</span>
+                              </span>
+                            </>
+                          )}
                         </p>
                         <h4 className="text-slate-900 dark:text-white font-semibold text-sm group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors line-clamp-1">{post.title}</h4>
-                        <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 line-clamp-1 leading-relaxed">{post.summary}</p>
+                        <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 line-clamp-1 leading-relaxed text-justify">{post.summary}</p>
                       </Link>
                     </div>
                   ))}
@@ -339,14 +389,14 @@ export default function Home() {
                   </h3>
 
                   {/* Summary */}
-                  <p className="mt-3 text-sm leading-relaxed text-slate-500 dark:text-slate-400 line-clamp-3">
+                  <p className="mt-3 text-sm leading-relaxed text-slate-500 dark:text-slate-400 line-clamp-3 text-justify">
                     {post.summary}
                   </p>
                 </div>
 
                 <div className="mt-6 w-full pt-4 border-t border-slate-100 dark:border-slate-900/80 flex items-center justify-between text-xs text-slate-400 dark:text-slate-500 font-mono">
                   {/* Date & Time */}
-                  <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-3 flex-wrap">
                     <span className="flex items-center gap-1">
                       <Calendar className="h-3.5 w-3.5 text-slate-400 dark:text-slate-600" />
                       <span>{new Date(post.createdAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}</span>
@@ -355,6 +405,12 @@ export default function Home() {
                       <Clock className="h-3.5 w-3.5 text-slate-400 dark:text-slate-600" />
                       <span>{post.readTime}</span>
                     </span>
+                    {post.views !== undefined && post.views > 0 && (
+                      <span className="flex items-center gap-1">
+                        <Eye className="h-3.5 w-3.5 text-slate-400 dark:text-slate-600" />
+                        <span>{post.views}</span>
+                      </span>
+                    )}
                   </div>
 
                   {/* Read More button */}

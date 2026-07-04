@@ -10,4 +10,5 @@ export interface BlogPost {
   readTime: string;
   coverImage?: string;
   status?: 'draft' | 'published';
+  views?: number;
 }

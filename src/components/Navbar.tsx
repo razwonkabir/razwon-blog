@@ -66,10 +66,10 @@ export default function Navbar() {
   };
 
   const navItems = [
-    { name: 'Home', path: '/', icon: Home },
-    { name: 'Blog', path: '/posts', icon: BookOpen },
-    { name: 'About', path: '/about', icon: User },
-    { name: 'CMD CENTER', path: 'https://ioi.razwon.xyz', icon: Code, isExternal: true },
+    { name: 'Home', path: '/', icon: Home, iconColor: 'text-sky-500 dark:text-sky-400', activeClass: 'text-sky-600 dark:text-sky-400', hoverClass: 'hover:text-sky-600 dark:hover:text-sky-400' },
+    { name: 'Blog', path: '/posts', icon: BookOpen, iconColor: 'text-emerald-500 dark:text-emerald-400', activeClass: 'text-emerald-600 dark:text-emerald-400', hoverClass: 'hover:text-emerald-600 dark:hover:text-emerald-400' },
+    { name: 'About', path: '/about', icon: User, iconColor: 'text-amber-500 dark:text-amber-400', activeClass: 'text-amber-600 dark:text-amber-400', hoverClass: 'hover:text-amber-600 dark:hover:text-amber-400' },
+    { name: 'CMD CENTER', path: 'https://ioi.razwon.xyz', icon: Code, isExternal: true, iconColor: 'text-indigo-500 dark:text-indigo-400', hoverClass: 'hover:text-indigo-600 dark:hover:text-indigo-400' },
   ];
 
   return (
@@ -77,14 +77,14 @@ export default function Navbar() {
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         {/* Brand Logo with Site Logo */}
         <div className="flex items-center gap-2">
-          <Link to="/" id="brand-logo" className="flex items-center gap-2 font-display text-lg sm:text-2xl font-extrabold tracking-tight text-slate-900 dark:text-white hover:opacity-90">
+          <Link to="/" id="brand-logo" className="flex items-center gap-2 font-display text-lg sm:text-2xl font-extrabold tracking-tight hover:opacity-90">
             <img 
               src={siteLogo} 
               alt="Skyline Logo" 
-              className="h-8 w-8 rounded-full object-cover border border-indigo-500/50 shadow" 
+              className="h-8 w-8 rounded-full object-cover border border-indigo-500/50 shadow animate-pulse" 
               referrerPolicy="no-referrer"
             />
-            <span className="inline">Skyline 2026</span>
+            <span className="inline bg-gradient-to-r from-sky-500 via-indigo-500 to-purple-500 bg-clip-text text-transparent">Skyline 2026</span>
           </Link>
         </div>
 
@@ -100,9 +100,9 @@ export default function Navbar() {
                   target="_blank"
                   rel="noopener noreferrer"
                   id={`nav-link-${item.name.toLowerCase().replace(/\s+/g, '-')}`}
-                  className="flex items-center gap-1.5 text-sm font-medium text-slate-500 hover:text-indigo-600 dark:text-slate-400 dark:hover:text-indigo-400 transition-colors duration-200"
+                  className={`flex items-center gap-1.5 text-sm font-semibold text-slate-500 transition-colors duration-200 ${item.hoverClass}`}
                 >
-                  <item.icon className="h-4 w-4" />
+                  <item.icon className={`h-4 w-4 ${item.iconColor}`} />
                   <span>{item.name}</span>
                 </a>
               );
@@ -112,16 +112,16 @@ export default function Navbar() {
                 key={item.path}
                 to={item.path}
                 id={`nav-link-${item.name.toLowerCase()}`}
-                className={`relative flex items-center gap-1.5 text-sm font-medium transition-colors duration-200 ${
-                  active ? 'text-indigo-600 dark:text-indigo-400' : 'text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white'
+                className={`relative flex items-center gap-1.5 text-sm font-semibold transition-colors duration-200 ${
+                  active ? item.activeClass : `text-slate-500 hover:text-slate-900 dark:text-slate-400 ${item.hoverClass}`
                 }`}
               >
-                <item.icon className="h-4 w-4" />
+                <item.icon className={`h-4 w-4 ${item.iconColor}`} />
                 <span>{item.name}</span>
                 {active && (
                   <motion.div
                     layoutId="active-nav-indicator"
-                    className="absolute -bottom-[21px] left-0 right-0 h-0.5 bg-indigo-500"
+                    className="absolute -bottom-[21px] left-0 right-0 h-0.5 bg-gradient-to-r from-indigo-500 to-purple-500"
                     transition={{ type: 'spring', stiffness: 380, damping: 30 }}
                   />
                 )}
@@ -202,9 +202,9 @@ export default function Navbar() {
                 target="_blank"
                 rel="noopener noreferrer"
                 id={`mobile-nav-link-${item.name.toLowerCase().replace(/\s+/g, '-')}`}
-                className="flex flex-col items-center gap-1 text-[10px] font-semibold text-slate-500 hover:text-indigo-600 dark:text-slate-400 dark:hover:text-indigo-400 transition-colors"
+                className={`flex flex-col items-center gap-1 text-[10px] font-bold text-slate-500 transition-colors ${item.hoverClass}`}
               >
-                <item.icon className="h-4.5 w-4.5 text-indigo-500" />
+                <item.icon className={`h-5 w-5 ${item.iconColor}`} />
                 <span>{item.name}</span>
               </a>
             );
@@ -214,11 +214,11 @@ export default function Navbar() {
               key={item.path}
               to={item.path}
               id={`mobile-nav-link-${item.name.toLowerCase()}`}
-              className={`flex flex-col items-center gap-1 text-[10px] font-semibold transition-colors ${
-                active ? 'text-indigo-600 dark:text-indigo-400' : 'text-slate-500 dark:text-slate-400'
+              className={`flex flex-col items-center gap-1 text-[10px] font-bold transition-colors ${
+                active ? item.activeClass : `text-slate-500 dark:text-slate-400 ${item.hoverClass}`
               }`}
             >
-              <item.icon className="h-4.5 w-4.5" />
+              <item.icon className={`h-5 w-5 ${item.iconColor}`} />
               <span>{item.name}</span>
             </Link>
           );

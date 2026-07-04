@@ -64,8 +64,8 @@ export default function Login() {
           <h2 className="mt-6 text-3xl font-extrabold font-display text-slate-900 dark:text-white tracking-tight">
             Admin Authenticator
           </h2>
-          <p className="mt-2 text-sm text-slate-500 dark:text-slate-400 font-mono">
-            Bludit-inspired secure content engine login
+          <p className="mt-2 text-sm text-slate-500 dark:text-slate-400 font-mono text-center">
+            Skyline 2026 Blog Secure Admin Engine Login
           </p>
         </div>
 
@@ -73,7 +73,7 @@ export default function Login() {
           <div className="border-b border-slate-100 dark:border-slate-800 pb-4 text-center">
             <span className="inline-flex items-center gap-1.5 rounded-full bg-slate-100 dark:bg-slate-950 px-3 py-1 text-xs font-semibold text-slate-600 dark:text-slate-400 border border-slate-200/50 dark:border-slate-800/60 font-mono">
               <Terminal className="h-3 w-3 text-indigo-500" />
-              <span>STATUS: SECURE_ONLY</span>
+              <span>STATUS: AUTHORISED_ONLY!</span>
             </span>
           </div>
 
@@ -91,7 +91,7 @@ export default function Login() {
             </motion.div>
           )}
 
-          <p className="text-sm text-slate-500 dark:text-slate-400 text-center leading-relaxed font-sans">
+          <p className="text-sm text-slate-500 dark:text-slate-400 leading-relaxed font-sans text-justify">
             This platform uses strict Google Whitelist authentication. Access is strictly limited to authorized administrative developers.
           </p>
 

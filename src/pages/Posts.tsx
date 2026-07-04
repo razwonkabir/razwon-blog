@@ -5,7 +5,7 @@ import { db } from '../firebase';
 import { BlogPost } from '../types';
 import { SEED_POSTS } from '../data/seedData';
 import { motion } from 'motion/react';
-import { Search, Calendar, Clock, Tag, ArrowRight, BookOpen, FolderOpen, RefreshCw } from 'lucide-react';
+import { Search, Calendar, Clock, Tag, ArrowRight, BookOpen, FolderOpen, RefreshCw, Eye } from 'lucide-react';
 
 export default function Posts() {
   const [posts, setPosts] = useState<BlogPost[]>([]);
@@ -286,11 +286,11 @@ export default function Posts() {
                       <h2 className="font-display text-lg font-bold text-slate-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
                         <Link to={`/posts/${post.id}`}>{post.title}</Link>
                       </h2>
-                      <p className="mt-2 text-sm text-slate-500 dark:text-slate-400 line-clamp-3 leading-relaxed">{post.summary}</p>
+                      <p className="mt-2 text-sm text-slate-500 dark:text-slate-400 line-clamp-3 leading-relaxed text-justify">{post.summary}</p>
                     </div>
 
                     <div className="mt-6 pt-4 border-t border-slate-100 dark:border-slate-800/60 flex items-center justify-between text-[11px] font-mono text-slate-400 dark:text-slate-500">
-                      <div className="flex items-center gap-3">
+                      <div className="flex items-center gap-3 flex-wrap">
                         <span className="flex items-center gap-1">
                           <Calendar className="h-3.5 w-3.5 text-slate-400 dark:text-slate-600" />
                           <span>{new Date(post.createdAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}</span>
@@ -299,6 +299,12 @@ export default function Posts() {
                           <Clock className="h-3.5 w-3.5 text-slate-400 dark:text-slate-600" />
                           <span>{post.readTime}</span>
                         </span>
+                        {post.views !== undefined && post.views > 0 && (
+                          <span className="flex items-center gap-1">
+                            <Eye className="h-3.5 w-3.5 text-slate-400 dark:text-slate-600" />
+                            <span>{post.views} views</span>
+                          </span>
+                        )}
                       </div>
                       <Link to={`/posts/${post.id}`} className="text-indigo-600 dark:text-indigo-400 font-sans font-semibold inline-flex items-center gap-0.5 hover:text-indigo-500 dark:hover:text-indigo-300">
                         <span>Read</span>
