@@ -148,9 +148,9 @@ export default function Home() {
                     <Globe className="h-3 w-3 text-indigo-500" />
                     <span>ioi.razwon.xyz</span>
                   </a>
-                  <a href="mailto:termremo@gmail.com" className="flex items-center gap-1 px-2.5 py-1 rounded-full bg-slate-50 dark:bg-slate-950 border border-slate-100 dark:border-slate-800 hover:text-indigo-600 dark:hover:text-white transition-all text-xs font-semibold">
+                  <a href="mailto:inbox@razwon.xyz" className="flex items-center gap-1 px-2.5 py-1 rounded-full bg-slate-50 dark:bg-slate-950 border border-slate-100 dark:border-slate-800 hover:text-indigo-600 dark:hover:text-white transition-all text-xs font-semibold">
                     <Mail className="h-3 w-3 text-rose-500" />
-                    <span>termremo@gmail.com</span>
+                    <span>inbox@razwon.xyz</span>
                   </a>
                 </div>
               </div>

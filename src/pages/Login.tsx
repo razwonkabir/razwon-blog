@@ -6,7 +6,7 @@ import { motion } from 'motion/react';
 import { ShieldAlert, Terminal, KeyRound } from 'lucide-react';
 
 const WHITELIST_EMAILS = [
-  'termremo@gmail.com',
+  'inbox@razwon.xyz',
   'razwon2009@gmail.com',
   'sew123ty@gmail.com',
   'apnosmedia2022@gmail.com'

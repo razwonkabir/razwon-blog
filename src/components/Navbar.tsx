@@ -20,7 +20,7 @@ import { onAuthStateChanged, signOut, User as FirebaseUser } from 'firebase/auth
 import siteLogo from '../assets/images/site_logo_1783046576955.png';
 
 const WHITELIST_EMAILS = [
-  'termremo@gmail.com',
+  'inbox@razwon.xyz',
   'razwon2009@gmail.com',
   'sew123ty@gmail.com',
   'apnosmedia2022@gmail.com'

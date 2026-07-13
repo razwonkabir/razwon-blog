@@ -36,15 +36,52 @@
         "readTime": {
           "type": "string",
           "description": "Estimated duration to read the article."
+        },
+        "coverImage": {
+          "type": "string",
+          "description": "Optional URL to a cover image."
+        },
+        "status": {
+          "type": "string",
+          "description": "Draft or published status of the post.",
+          "enum": ["draft", "published"]
+        },
+        "views": {
+          "type": "number",
+          "description": "View counter."
         }
       },
       "required": ["title", "summary", "content", "tags", "categories", "author", "createdAt", "readTime"]
+    },
+    "Subscription": {
+      "title": "Subscription",
+      "description": "Newsletter subscription registration.",
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string",
+          "description": "The subscriber's email address."
+        },
+        "subscribedAt": {
+          "type": "number",
+          "description": "Timestamp of subscription."
+        },
+        "source": {
+          "type": "string",
+          "description": "Source campaign or page of subscription."
+        }
+      },
+      "required": ["email", "subscribedAt", "source"]
     }
   },
   "firestore": {
     "/posts/{postId}": {
       "schema": "BlogPost",
       "description": "Global collection containing all blog publications."
+    },
+    "/subscriptions/{subId}": {
+      "schema": "Subscription",
+      "description": "Collection containing all email newsletter subscriptions."
     }
   }
 }

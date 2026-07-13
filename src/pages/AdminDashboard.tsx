@@ -421,7 +421,7 @@ export default function AdminDashboard() {
       categories: categories.length > 0 ? categories : ["General"],
       author: author.trim() || "Admin",
       readTime: readTime.trim() || "5 min read",
-      coverImage: coverImage.trim() || undefined,
+      coverImage: coverImage.trim() || "",
       status: targetStatus
     };
 

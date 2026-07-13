@@ -78,7 +78,7 @@ function AppContent() {
                 <MessageCircle className="h-4.5 w-4.5" />
               </a>
               <a 
-                href="mailto:mail@razwon.xyz" 
+                href="mailto:inbox@razwon.xyz" 
                 className="p-2.5 rounded-full bg-indigo-50/50 dark:bg-indigo-950/20 border border-indigo-200 dark:border-indigo-900/40 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-600 hover:text-white transition-all shadow-md hover:scale-110 duration-250"
                 title="Email"
               >

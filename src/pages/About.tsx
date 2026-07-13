@@ -104,9 +104,9 @@ export default function About() {
                   <MessageCircle className="h-3.5 w-3.5 text-emerald-400" />
                   <span>Whatsapp</span>
                 </a>
-                <a href="mailto:mail@razwon.xyz" className="flex items-center gap-1.5 text-xs font-semibold text-slate-300 hover:text-teal-400 transition-colors bg-slate-800/80 border border-slate-700/80 px-3.5 py-2 rounded-xl">
+                <a href="mailto:inbox@razwon.xyz" className="flex items-center gap-1.5 text-xs font-semibold text-slate-300 hover:text-teal-400 transition-colors bg-slate-800/80 border border-slate-700/80 px-3.5 py-2 rounded-xl">
                   <Mail className="h-3.5 w-3.5 text-teal-400" />
-                  <span>mail@razwon.xyz</span>
+                  <span>inbox@razwon.xyz</span>
                 </a>
                 <a href="tel:+8801794538510" className="flex items-center gap-1.5 text-xs font-semibold text-slate-300 hover:text-amber-400 transition-colors bg-slate-800/80 border border-slate-700/80 px-3.5 py-2 rounded-xl">
                   <Phone className="h-3.5 w-3.5 text-amber-400" />
