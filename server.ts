@@ -1,6 +1,6 @@
 import express from 'express';
-import path from 'path';
-import fs from 'fs';
+import path from 'node:path';
+import fs from 'node:fs';
 import { createServer as createViteServer } from 'vite';
 import initSqlJs, { Database } from 'sql.js';
 import { SEED_POSTS } from './src/data/seedData';
