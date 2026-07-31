@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { collection, getDocs, addDoc, doc, updateDoc, deleteDoc } from 'firebase/firestore';
-import { db, auth } from '../firebase';
+import { auth } from '../firebase';
 import { BlogPost } from '../types';
 import { motion } from 'motion/react';
 import Markdown from 'react-markdown';
@@ -109,21 +108,13 @@ export default function AdminDashboard() {
     }
   }, []);
 
-  // Fetch posts from Firestore for managing
+  // Fetch posts from Cloudflare D1 for managing
   const fetchExistingPosts = async () => {
     setPostsLoading(true);
     try {
-      const postsCol = collection(db, 'posts');
-      const snapshot = await getDocs(postsCol);
-      const list = snapshot.docs.map(doc => {
-        const data = doc.data();
-        return {
-          id: doc.id,
-          ...data,
-          categories: data.categories || ['General'],
-          tags: data.tags || ['General']
-        };
-      }) as BlogPost[];
+      const res = await fetch('/api/posts?includeDrafts=true');
+      if (!res.ok) throw new Error('Failed to fetch posts');
+      const list: BlogPost[] = await res.json();
       
       // Sort by createdAt descending
       list.sort((a, b) => b.createdAt - a.createdAt);
@@ -352,7 +343,7 @@ export default function AdminDashboard() {
     }
   };
 
-  // Delete document from Firestore
+  // Delete document from Cloudflare D1
   const handleDeletePost = async (postId: string, postTitle: string) => {
     const confirmation = window.confirm(`Are you absolutely sure you want to permanently delete "${postTitle}"?\n\nThis action cannot be undone.`);
     if (!confirmation) return;
@@ -360,7 +351,9 @@ export default function AdminDashboard() {
     setError(null);
     setSuccess(null);
     try {
-      await deleteDoc(doc(db, 'posts', postId));
+      const res = await fetch(`/api/posts/${postId}`, { method: 'DELETE' });
+      if (!res.ok) throw new Error('Failed to delete post');
+
       setSuccess(`"${postTitle}" has been successfully deleted.`);
       
       // If we were editing this exact post, reset the form
@@ -376,7 +369,7 @@ export default function AdminDashboard() {
       }, 4000);
     } catch (err: any) {
       console.error("Error deleting post:", err);
-      setError(err?.message || "Failed to delete post. Please verify security permissions.");
+      setError(err?.message || "Failed to delete post.");
     }
   };
 
@@ -428,17 +421,27 @@ export default function AdminDashboard() {
     try {
       if (editingPostId) {
         // UPDATE EXISTING POST
-        const postDocRef = doc(db, 'posts', editingPostId);
-        await updateDoc(postDocRef, newPostData);
+        const res = await fetch(`/api/posts/${editingPostId}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(newPostData)
+        });
+        if (!res.ok) throw new Error('Failed to update post');
+
         setSuccess(`"${title.trim()}" updated successfully as ${targetStatus}.`);
         setEditingPostId(null);
       } else {
         // CREATE NEW POST
-        const postsCol = collection(db, 'posts');
-        await addDoc(postsCol, {
-          ...newPostData,
-          createdAt: Date.now()
+        const res = await fetch('/api/posts', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            ...newPostData,
+            createdAt: Date.now()
+          })
         });
+        if (!res.ok) throw new Error('Failed to create post');
+
         setSuccess(`"${title.trim()}" saved successfully as ${targetStatus}.`);
       }
       
@@ -460,8 +463,8 @@ export default function AdminDashboard() {
       // Refresh posts list
       await fetchExistingPosts();
     } catch (err: any) {
-      console.error("Firebase write error caught in CMS dashboard:", err);
-      setError(err?.message || "Failed to save post. Please verify your Firestore security rules.");
+      console.error("D1 API write error caught in CMS dashboard:", err);
+      setError(err?.message || "Failed to save post to Cloudflare D1.");
     } finally {
       setSubmitting(false);
     }

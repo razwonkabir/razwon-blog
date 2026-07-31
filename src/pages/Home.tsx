@@ -1,9 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { collection, getDocs, addDoc } from 'firebase/firestore';
-import { db } from '../firebase';
 import { BlogPost } from '../types';
-import { SEED_POSTS } from '../data/seedData';
 import { motion } from 'motion/react';
 import { Search, Calendar, Clock, Tag, ArrowRight, Sparkles, BookOpen, ArrowUpRight, Cpu, FolderOpen, RefreshCw, Eye, Shield, Globe, Mail } from 'lucide-react';
 import NewsletterSubscription from '../components/NewsletterSubscription';
@@ -16,45 +13,16 @@ export default function Home() {
   const [selectedTag, setSelectedTag] = useState<string | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
-  // Fetch posts from Firestore
+  // Fetch posts from backend Cloudflare D1 API
   const fetchPosts = async () => {
     setLoading(true);
     try {
-      const postsCol = collection(db, 'posts');
-      const snapshot = await getDocs(postsCol);
-      let list: BlogPost[] = snapshot.docs.map(doc => {
-        const data = doc.data();
-        return {
-          id: doc.id,
-          ...data,
-          // Fallback for older posts that don't have categories/tags fields
-          categories: data.categories || ['General'],
-          tags: data.tags || ['General']
-        };
-      }) as BlogPost[];
+      const res = await fetch('/api/posts');
+      if (!res.ok) throw new Error('Failed to fetch posts');
+      const list: BlogPost[] = await res.json();
 
-      // If no posts are returned, automatically seed database
-      if (list.length === 0) {
-        console.log("No posts found. Seeding initial posts...");
-        for (const post of SEED_POSTS) {
-          await addDoc(postsCol, post);
-        }
-        // Refetch after seeding
-        const newSnapshot = await getDocs(postsCol);
-        list = newSnapshot.docs.map(doc => {
-          const data = doc.data();
-          return {
-            id: doc.id,
-            ...data,
-            categories: data.categories || ['General'],
-            tags: data.tags || ['General']
-          };
-        }) as BlogPost[];
-      }
-
-      // Sort by createdAt descending
+      // Sort by createdAt descending & filter out draft posts
       list.sort((a, b) => b.createdAt - a.createdAt);
-      // Filter out draft posts so only published ones are shown to the public
       const publishedList = list.filter(p => p.status !== 'draft');
       setPosts(publishedList);
     } catch (error) {
