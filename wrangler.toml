@@ -1,9 +1,0 @@
-name = "razwon-blog"
-main = "server.ts"
-compatibility_date = "2026-07-31"
-compatibility_flags = ["nodejs_compat"]
-
-[[d1_databases]]
-binding = "DB"
-database_name = "razwon-blog-db"
-database_id = "181f079d-68da-4bef-bae4-b9e836a98c0d"

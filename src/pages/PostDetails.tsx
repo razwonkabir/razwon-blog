@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
+import { doc, getDoc, updateDoc, increment } from 'firebase/firestore';
+import { db } from '../firebase';
 import { BlogPost } from '../types';
 import { motion } from 'motion/react';
 import Markdown from 'react-markdown';
@@ -38,21 +40,32 @@ export default function PostDetails() {
       if (!id) return;
       setLoading(true);
       try {
+        const docRef = doc(db, 'posts', id);
+
+        // Safely increment views exactly once on component mount
         if (!incremented) {
           try {
-            await fetch(`/api/posts/${id}/view`, { method: 'POST' });
+            await updateDoc(docRef, {
+              views: increment(1)
+            });
             incremented = true;
           } catch (e) {
-            console.warn("Could not increment views.", e);
+            console.warn("Could not increment views directly. It might be a new post or network issue.", e);
           }
         }
 
-        const res = await fetch(`/api/posts/${id}`);
-        if (res.ok) {
-          const data: BlogPost = await res.json();
-          setPost(data);
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+          const data = docSnap.data();
+          setPost({ 
+            id: docSnap.id, 
+            ...data,
+            categories: data.categories || ['General'],
+            tags: data.tags || ['General'],
+            views: (data.views || 0) + (incremented ? 0 : 1) // Ensure views count reflects current view if increment succeeded/failed
+          } as BlogPost);
         } else {
-          console.error("No such post exists in Cloudflare D1 database!");
+          console.error("No such document exists in Firestore!");
         }
       } catch (error) {
         console.error("Error fetching post details:", error);

@@ -1,6 +1,9 @@
 import { useState, useEffect } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
+import { collection, getDocs, addDoc } from 'firebase/firestore';
+import { db } from '../firebase';
 import { BlogPost } from '../types';
+import { SEED_POSTS } from '../data/seedData';
 import { motion } from 'motion/react';
 import { Search, Calendar, Clock, Tag, ArrowRight, BookOpen, FolderOpen, RefreshCw, Eye } from 'lucide-react';
 
@@ -37,9 +40,33 @@ export default function Posts() {
   const fetchPosts = async () => {
     setLoading(true);
     try {
-      const res = await fetch('/api/posts');
-      if (!res.ok) throw new Error('Failed to fetch posts');
-      const list: BlogPost[] = await res.json();
+      const postsCol = collection(db, 'posts');
+      const snapshot = await getDocs(postsCol);
+      let list: BlogPost[] = snapshot.docs.map(doc => {
+        const data = doc.data();
+        return {
+          id: doc.id,
+          ...data,
+          categories: data.categories || ['General'],
+          tags: data.tags || ['General']
+        };
+      }) as BlogPost[];
+
+      if (list.length === 0) {
+        for (const post of SEED_POSTS) {
+          await addDoc(postsCol, post);
+        }
+        const newSnapshot = await getDocs(postsCol);
+        list = newSnapshot.docs.map(doc => {
+          const data = doc.data();
+          return {
+            id: doc.id,
+            ...data,
+            categories: data.categories || ['General'],
+            tags: data.tags || ['General']
+          };
+        }) as BlogPost[];
+      }
 
       list.sort((a, b) => b.createdAt - a.createdAt);
       // Filter out draft posts so only published ones are shown to the public

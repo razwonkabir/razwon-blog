@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { collection, addDoc, query, where, getDocs } from 'firebase/firestore';
+import { db } from '../firebase';
 import { motion } from 'motion/react';
 import { Send, Mail, CheckCircle, AlertTriangle, Sparkles } from 'lucide-react';
 
@@ -17,25 +19,27 @@ export default function NewsletterSubscription() {
     setErrorMessage('');
 
     try {
-      const res = await fetch('/api/subscriptions', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          email: email.trim(),
-          source: 'skyline_blog'
-        })
+      const emailLower = email.trim().toLowerCase();
+      
+      // Check if email already exists in subscriptions
+      const q = query(collection(db, 'subscriptions'), where('email', '==', emailLower));
+      const querySnapshot = await getDocs(q);
+      
+      if (!querySnapshot.empty) {
+        setStatus('already_subscribed');
+        setSubmitting(false);
+        return;
+      }
+
+      // Add subscription document to Firestore
+      await addDoc(collection(db, 'subscriptions'), {
+        email: emailLower,
+        subscribedAt: Date.now(),
+        source: 'skyline_blog'
       });
 
-      const data = await res.json();
-
-      if (res.status === 409 || data.status === 'already_subscribed') {
-        setStatus('already_subscribed');
-      } else if (!res.ok) {
-        throw new Error(data.error || 'Subscription failed');
-      } else {
-        setStatus('success');
-        setEmail('');
-      }
+      setStatus('success');
+      setEmail('');
     } catch (err: any) {
       console.error('Newsletter subscription error:', err);
       setStatus('error');
